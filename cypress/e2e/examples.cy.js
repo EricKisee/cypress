@@ -25,11 +25,29 @@ describe('Various Examples', () => {
         // cy.location('pathname').should('eq', '/examples')
     })
 
-    it.only('intercepts', () => {
+    it('intercepts', () => {
         cy.intercept('POST', '/examples', {
             // body: {message: 'Successfully intercepted request'},
             fixture: 'example.json'
         })
         cy.getDataTest('post-button').click()
+    })
+
+    it.only('grudges', ()=>{
+        cy.contains(/add some grudges/i)
+
+        cy.getDataTest('grudge-list').within(()=>{
+            cy.get('li').should('have.length', 0)
+        })
+
+        cy.getDataTest('grudge-input').within(() => {
+            cy.get('input').type('First Grudge')
+        })
+
+        cy.getDataTest('add-grudge-button').click()
+        cy.getDataTest('grudge-list').within(()=>{
+            cy.get('li').should('have.length', 1)
+        })
+
     })
 })
